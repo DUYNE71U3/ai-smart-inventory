@@ -1,0 +1,150 @@
+@model smart_inventory.DTOs.ProductDto
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID:</dt>
+                        <dd class="col-sm-9">@Model.Id</dd>
+
+                        <dt class="col-sm-3">Tên sản phẩm:</dt>
+                        <dd class="col-sm-9"><strong>@Model.Name</strong></dd>
+
+                        <dt class="col-sm-3">Mã SKU:</dt>
+                        <dd class="col-sm-9"><code>@Model.SKU</code></dd>
+
+                        <dt class="col-sm-3">Mô tả:</dt>
+                        <dd class="col-sm-9">@(Model.Description ?? "Không có mô tả")</dd>
+
+                        <dt class="col-sm-3">Danh mục:</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-secondary">@Model.CategoryName</span>
+                        </dd>
+
+                        <dt class="col-sm-3">Số lượng:</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.Quantity > 0)
+                            {
+                                <span class="badge bg-success fs-6">@Model.Quantity</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fs-6">Hết hàng</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">Giá:</dt>
+                        <dd class="col-sm-9">
+                            <strong class="text-success fs-5">
+                                @Model.Price.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))
+                            </strong>
+                        </dd>
+
+                        <dt class="col-sm-3">Vị trí kho:</dt>
+                        <dd class="col-sm-9">@(Model.Location ?? "Chưa xác định")</dd>
+
+                        <dt class="col-sm-3">Ghi chú:</dt>
+                        <dd class="col-sm-9">@(Model.Notes ?? "Không có ghi chú")</dd>
+
+                        <dt class="col-sm-3">Trạng thái:</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Ngừng hoạt động</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">Ngày tạo:</dt>
+                        <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-3">Ngày cập nhật:</dt>
+                        <dd class="col-sm-9">@Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+                    </dl>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                        </a>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Chỉnh sửa
+                            </a>
+                            <a asp-controller="Category" asp-action="Details" asp-route-id="@Model.CategoryId" 
+                               class="btn btn-info">
+                                <i class="fas fa-folder"></i> Xem danh mục
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Thống kê</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <i class="fas fa-boxes fa-2x text-primary mb-2"></i>
+                            <h6>@Model.Quantity</h6>
+                            <small class="text-muted">Số lượng</small>
+                        </div>
+                        <div class="col-6">
+                            <i class="fas fa-money-bill-wave fa-2x text-success mb-2"></i>
+                            <h6>@Model.Price.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</h6>
+                            <small class="text-muted">Đơn giá</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <h6 class="text-muted">Tổng giá trị</h6>
+                        <h4 class="text-primary">
+                            @((Model.Price * Model.Quantity).ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")))
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Quantity <= 10 && Model.Quantity > 0)
+            {
+                <div class="card mt-3 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="card-title mb-0">
+                            <i class="fas fa-exclamation-triangle"></i> Cảnh báo tồn kho
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">Sản phẩm sắp hết hàng. Chỉ còn <strong>@Model.Quantity</strong> sản phẩm.</p>
+                    </div>
+                </div>
+            }
+            else if (Model.Quantity == 0)
+            {
+                <div class="card mt-3 border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h6 class="card-title mb-0">
+                            <i class="fas fa-ban"></i> Hết hàng
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">Sản phẩm này đã hết hàng. Cần nhập thêm hàng.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

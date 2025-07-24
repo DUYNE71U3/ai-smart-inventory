@@ -1,0 +1,69 @@
+@model smart_inventory.DTOs.CategoryDto
+
+@{
+    ViewData["Title"] = "Chi tiết danh mục";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID:</dt>
+                        <dd class="col-sm-9">@Model.Id</dd>
+
+                        <dt class="col-sm-3">Tên danh mục:</dt>
+                        <dd class="col-sm-9"><strong>@Model.Name</strong></dd>
+
+                        <dt class="col-sm-3">Mô tả:</dt>
+                        <dd class="col-sm-9">@(Model.Description ?? "Không có mô tả")</dd>
+
+                        <dt class="col-sm-3">Số sản phẩm:</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-info">@Model.ProductCount</span>
+                        </dd>
+
+                        <dt class="col-sm-3">Ngày tạo:</dt>
+                        <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-3">Ngày cập nhật:</dt>
+                        <dd class="col-sm-9">@Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+                    </dl>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                        </a>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Chỉnh sửa
+                            </a>
+                            <a asp-controller="Product" asp-action="ByCategory" asp-route-categoryId="@Model.Id" 
+                               class="btn btn-success">
+                                <i class="fas fa-list"></i> Xem sản phẩm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Thống kê</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <i class="fas fa-box fa-3x text-primary mb-3"></i>
+                        <h4>@Model.ProductCount</h4>
+                        <p class="text-muted">Sản phẩm trong danh mục</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
