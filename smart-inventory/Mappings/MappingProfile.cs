@@ -3,6 +3,8 @@ using smart_inventory.Models;
 using smart_inventory.DTOs;
 using smart_inventory.CQRS.Categories.Commands;
 using smart_inventory.CQRS.Products.Commands;
+using System.Linq;
+using smart_inventory.Extensions;
 
 namespace smart_inventory.Mappings
 {
@@ -33,6 +35,21 @@ namespace smart_inventory.Mappings
             CreateMap<UpdateCategoryDto, UpdateCategoryCommand>();
             CreateMap<CreateProductDto, CreateProductCommand>();
             CreateMap<UpdateProductDto, UpdateProductCommand>();
+
+            // Stock mappings
+            CreateMap<Stock, StockDto>()
+                .ForMember(dest => dest.TypeName, 
+                    opt => opt.MapFrom(src => src.Type.GetDisplayName()))
+                .ForMember(dest => dest.TotalAmount,
+                    opt => opt.MapFrom(src => src.Details.Sum(d => d.Quantity * d.UnitPrice)));
+
+            CreateMap<StockDetail, StockDetailDto>()
+                .ForMember(dest => dest.ProductName,
+                    opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(dest => dest.ProductSKU,
+                    opt => opt.MapFrom(src => src.Product.SKU))
+                .ForMember(dest => dest.TotalPrice,
+                    opt => opt.MapFrom(src => src.Quantity * src.UnitPrice));
         }
     }
 }

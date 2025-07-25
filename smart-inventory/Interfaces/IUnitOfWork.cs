@@ -4,6 +4,7 @@ namespace smart_inventory.Interfaces
     {
         ICategoryRepository Categories { get; }
         IProductRepository Products { get; }
+        IStockRepository Stocks { get; }
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
