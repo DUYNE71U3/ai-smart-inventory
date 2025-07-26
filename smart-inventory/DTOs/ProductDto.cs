@@ -18,6 +18,12 @@ namespace smart_inventory.DTOs
         public DateTime UpdatedAt { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
+        
+        [Display(Name = "Nhà cung cấp")]
+        public int? SupplierId { get; set; }
+        
+        [Display(Name = "Tên nhà cung cấp")]
+        public string? SupplierName { get; set; }
     }
 
     public class CreateProductDto
@@ -57,6 +63,9 @@ namespace smart_inventory.DTOs
         [Required(ErrorMessage = "Danh mục là bắt buộc")]
         [Display(Name = "Danh mục")]
         public int CategoryId { get; set; }
+        
+        [Display(Name = "Nhà cung cấp")]
+        public int? SupplierId { get; set; }
     }
 
     public class UpdateProductDto
@@ -101,5 +110,8 @@ namespace smart_inventory.DTOs
         
         [Display(Name = "Trạng thái")]
         public bool IsActive { get; set; } = true;
+        
+        [Display(Name = "Nhà cung cấp")]
+        public int? SupplierId { get; set; }
     }
 }

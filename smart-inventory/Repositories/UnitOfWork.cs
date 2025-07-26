@@ -8,18 +8,19 @@ namespace smart_inventory.Repositories
     {
         private readonly ApplicationDbContext _context;
         private IDbContextTransaction? _transaction;
-        private IStockRepository? _stockRepository;
 
         public ICategoryRepository Categories { get; private set; }
         public IProductRepository Products { get; private set; }
-        public IStockRepository Stocks => 
-            _stockRepository ??= new StockRepository(_context);
+        public IStockRepository Stocks { get; private set; }
+        public ISupplierRepository Suppliers { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Categories = new CategoryRepository(_context);
             Products = new ProductRepository(_context);
+            Stocks = new StockRepository(_context);
+            Suppliers = new SupplierRepository(_context);
         }
 
         public async Task<int> SaveChangesAsync()

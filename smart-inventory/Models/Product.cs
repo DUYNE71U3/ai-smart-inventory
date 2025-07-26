@@ -57,5 +57,13 @@ namespace smart_inventory.Models
         // Navigation property
         [Display(Name = "Danh mục")]
         public virtual Category? Category { get; set; }
+
+        // Foreign key cho Supplier
+        [Display(Name = "Nhà cung cấp")]
+        public int? SupplierId { get; set; }
+        
+        // Navigation property
+        [Display(Name = "Nhà cung cấp")]
+        public virtual Supplier? Supplier { get; set; }
     }
 }

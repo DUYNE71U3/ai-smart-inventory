@@ -13,6 +13,7 @@ namespace smart_inventory.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockDetail> StockDetails { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -68,12 +69,34 @@ namespace smart_inventory.Data
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            // Configure Supplier
+            modelBuilder.Entity<Supplier>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Address).HasMaxLength(500);
+                entity.Property(e => e.Phone).HasMaxLength(20);
+                entity.Property(e => e.Email).HasMaxLength(100);
+                entity.Property(e => e.Notes).HasMaxLength(1000);
+                
+                // Unique constraint for Code
+                entity.HasIndex(e => e.Code).IsUnique();
+            });
+
             // Configure relationships
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Cấu hình quan hệ Product - Supplier
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Supplier)
+                .WithMany(s => s.Products)
+                .HasForeignKey(p => p.SupplierId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Seed initial data với DateTime tĩnh
             var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);

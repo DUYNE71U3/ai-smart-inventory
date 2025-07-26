@@ -3,23 +3,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using smart_inventory.DTOs;
 using smart_inventory.Interfaces;
 using smart_inventory.Services;
+using smart_inventory.ViewModels;
 
 namespace smart_inventory.Controllers
 {
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
+        private readonly ISupplierService _supplierService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, ISupplierService supplierService)
         {
             _categoryService = categoryService;
+            _supplierService = supplierService;
         }
 
         // GET: Category
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
-            return View(categories);
+            var suppliers = await _supplierService.GetAllSuppliersAsync();
+
+            var viewModel = new CategoryIndexViewModel
+            {
+                Categories = categories,
+                TotalSuppliers = suppliers.Count()
+            };
+
+            return View(viewModel);
         }
 
         // GET: Category/Details/5

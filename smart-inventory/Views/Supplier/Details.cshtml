@@ -1,0 +1,87 @@
+@model smart_inventory.DTOs.SupplierDto
+
+@{
+    ViewData["Title"] = "Chi tiết nhà cung cấp";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Tên nhà cung cấp:</dt>
+                        <dd class="col-sm-9"><strong>@Model.Name</strong></dd>
+
+                        <dt class="col-sm-3">Mã nhà cung cấp:</dt>
+                        <dd class="col-sm-9"><code>@Model.Code</code></dd>
+
+                        <dt class="col-sm-3">Liên hệ:</dt>
+                        <dd class="col-sm-9">
+                            @if (!string.IsNullOrEmpty(Model.Phone))
+                            {
+                                <div><i class="fas fa-phone"></i> @Model.Phone</div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Email))
+                            {
+                                <div><i class="fas fa-envelope"></i> @Model.Email</div>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">Địa chỉ:</dt>
+                        <dd class="col-sm-9">@(Model.Address ?? "Chưa cập nhật")</dd>
+
+                        <dt class="col-sm-3">Ghi chú:</dt>
+                        <dd class="col-sm-9">@(Model.Notes ?? "Không có ghi chú")</dd>
+
+                        <dt class="col-sm-3">Trạng thái:</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Ngừng hoạt động</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">Ngày tạo:</dt>
+                        <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-3">Ngày cập nhật:</dt>
+                        <dd class="col-sm-9">@Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+                    </dl>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </a>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Chỉnh sửa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Thống kê</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <i class="fas fa-box fa-3x text-primary mb-3"></i>
+                        <h4>@Model.ProductCount</h4>
+                        <p class="text-muted">Sản phẩm từ nhà cung cấp này</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -23,13 +23,21 @@ builder.Services.AddMediatR(typeof(Program).Assembly);
 
 // Add Unit of Work and Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Add Services
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IStockService, StockService>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+// Add Generic Repository
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+// Add Application Services
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 
 var app = builder.Build();
 

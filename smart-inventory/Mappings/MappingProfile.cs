@@ -5,6 +5,7 @@ using smart_inventory.CQRS.Categories.Commands;
 using smart_inventory.CQRS.Products.Commands;
 using System.Linq;
 using smart_inventory.Extensions;
+using smart_inventory.CQRS.Suppliers.Commands;
 
 namespace smart_inventory.Mappings
 {
@@ -50,6 +51,15 @@ namespace smart_inventory.Mappings
                     opt => opt.MapFrom(src => src.Product.SKU))
                 .ForMember(dest => dest.TotalPrice,
                     opt => opt.MapFrom(src => src.Quantity * src.UnitPrice));
+
+            // Supplier mappings
+            CreateMap<Supplier, SupplierDto>()
+                .ForMember(dest => dest.ProductCount,
+                    opt => opt.MapFrom(src => src.Products.Count));
+            CreateMap<CreateSupplierDto, CreateSupplierCommand>();
+            CreateMap<UpdateSupplierDto, UpdateSupplierCommand>();
+            CreateMap<CreateSupplierCommand, Supplier>();
+            CreateMap<UpdateSupplierCommand, Supplier>();
         }
     }
 }
